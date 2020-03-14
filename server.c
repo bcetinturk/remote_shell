@@ -5,35 +5,16 @@
 #include <errno.h>
 #include <sys/wait.h>
 #include <string.h>
-
-#define LINE_LENGTH 1024
+#include "utils.h"
 
 int main(int argc, char const *argv[])
 {
   pid_t pid;
-  char input_buffer[LINE_LENGTH];
   char **arg_list;
-  char *token, seperator[] = "\t\n ";
-  int i = 0;
 
-  arg_list = (char **)malloc(LINE_LENGTH * sizeof(char *));
-
-  fgets(input_buffer, LINE_LENGTH, stdin);
-  token = strtok(input_buffer, seperator);
-  while (token != NULL)
-  {
-    arg_list[i] = (char *)malloc(LINE_LENGTH * sizeof(char));
-    arg_list[i] = token;
-    i++;
-
-    token = strtok(NULL, seperator);
-  }
-
-  arg_list[i] = NULL;
-
-  for(int j=0; j<i; j++){
-    printf("%s\n", arg_list[j]);
-  }
+  char input[BUF_SIZE];
+  fgets(input, BUF_SIZE, stdin);
+  arg_list = parse_command(input);
 
   pid = fork();
   if(pid == -1){
