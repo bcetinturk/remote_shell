@@ -37,6 +37,7 @@ int main(int argc, char const *argv[])
     }
 
     read(new_sock, input, BUF_SIZE);
+    printf("message: %s\n", input);
 
     arg_list = parse_command(input);
 
@@ -47,6 +48,7 @@ int main(int argc, char const *argv[])
     }
     else if (pid == 0)
     { // child
+      dup2(new_sock, STDOUT_FILENO);
       execvp(arg_list[0], arg_list);
     }
     else
@@ -54,12 +56,12 @@ int main(int argc, char const *argv[])
       waitpid(pid, NULL, 0);
     }
 
-    char *response = "Command executed\n";
+    // char *response = "Command executed\n";
 
-    if (send(new_sock, response, strlen(response), 0) == -1)
-    {
-      perror("send");
-    }
+    // if (send(new_sock, response, strlen(response), 0) == -1)
+    // {
+    //   perror("send");
+    // }
 
     close(new_sock);
   }
