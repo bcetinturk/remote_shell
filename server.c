@@ -6,13 +6,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include "wrappers.h"
 #include "utils.h"
-
-void diep(char *s)
-{
-  perror(s);
-  exit(EXIT_FAILURE);
-}
 
 int main(int argc, char const *argv[])
 {
@@ -24,25 +19,13 @@ int main(int argc, char const *argv[])
   struct sockaddr_in my_addr, client_addr;
   char input[BUF_SIZE];
 
-  if ((server_sock = socket(PF_INET, SOCK_STREAM, 0)) == -1)
-  {
-    diep("socket");
-  }
+  server_sock = Socket();
+  my_addr = SetupAddress(3000);
 
-  memset(&my_addr, 0, sizeof(my_addr));
-  my_addr.sin_family = AF_INET;
-  my_addr.sin_port = htons(3000);
-  my_addr.sin_addr.s_addr = INADDR_ANY;
+  Bind(server_sock, &my_addr);
 
-  if (bind(server_sock, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) == -1)
-  {
-    diep("bind");
-  }
+  Listen(server_sock, 10);
 
-  if (listen(server_sock, 5) == -1)
-  {
-    diep("listen");
-  }
 
   while (1)
   {

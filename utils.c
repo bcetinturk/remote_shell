@@ -22,3 +22,9 @@ char **parse_command(char *input_buffer)
 
   return arg_list;
 }
+
+void diep(char *s)
+{
+  perror(s);
+  exit(EXIT_FAILURE);
+}
