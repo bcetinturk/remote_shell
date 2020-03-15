@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "utils.h"
 
 char **parse_command(char *input_buffer)

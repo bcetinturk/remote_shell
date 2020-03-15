@@ -63,6 +63,7 @@ int main(int argc, char const *argv[])
     //   perror("send");
     // }
 
+    memset(input, 0, sizeof(input));
     close(new_sock);
   }
   return 0;
